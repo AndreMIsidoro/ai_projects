@@ -32,4 +32,5 @@ public class AiClientConfig {
                         .build())
                 .build();
     }
+
 }
