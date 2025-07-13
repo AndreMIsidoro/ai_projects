@@ -3,10 +3,15 @@ package com.andreisidoro.aimodels.config;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import com.andreisidoro.aimodels.advisors.SimpleLoggerAdvisor;
 
 @Configuration
 public class AiClientConfig {
@@ -33,4 +38,15 @@ public class AiClientConfig {
                 .build();
     }
 
+    @Bean
+    public SimpleLoggerAdvisor simpleLoggerAdvisor() {
+        return new SimpleLoggerAdvisor();
+    }
+
+    @Bean
+    public ChatClient chatClient(OpenAiChatModel groqChatModel, SimpleLoggerAdvisor advisor) {
+        return ChatClient.builder(groqChatModel)
+                .defaultAdvisors(List.of(advisor))
+                .build();
+    }
 }

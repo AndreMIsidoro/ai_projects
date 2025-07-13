@@ -2,18 +2,21 @@ package com.andreisidoro.aimodels.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ai.openai.OpenAiChatModel;
-
+import org.springframework.ai.chat.client.ChatClient;
 
 @Service
 public class GroqAiService {
 
-    private final OpenAiChatModel groqChatModel;
+    private final ChatClient chatClient;
 
-    public GroqAiService(OpenAiChatModel groqChatModel) {
-        this.groqChatModel = groqChatModel;
+    public GroqAiService(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     public String chat(String message) {
-        return groqChatModel.call(message);
+        return this.chatClient.prompt()
+            .user(message)
+            .call()
+            .content();
     }
 }
