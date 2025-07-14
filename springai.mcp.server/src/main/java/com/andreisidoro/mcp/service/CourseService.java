@@ -2,16 +2,16 @@ package com.andreisidoro.mcp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
+import com.andreisidoro.mcp.model.Course;
 
 import jakarta.annotation.PostConstruct;
-
-import com.andreisidoro.mcp.model.Course;
 
 @Service
 public class CourseService {
@@ -30,6 +30,13 @@ public class CourseService {
             .filter(course -> course.title().equals(title))
             .findFirst()
             .orElse(null);
+    }
+
+    @Tool(name = "search_courses", description = "Search courses containing a keyword")
+    public List<Course> searchCourses(String keyword) {
+        return courses.stream()
+            .filter(course -> course.title().toLowerCase().contains(keyword.toLowerCase()))
+            .collect(Collectors.toList());
     }
 
     @PostConstruct
